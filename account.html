@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Account - LocalLense</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Light defaults */
+    body { background:#fafafa; color:#1f2937; }
+    .container { max-width: 960px; margin: 40px auto; padding: 0 16px; }
+    .card { background:#ffffff; border:1px solid #e5e7eb; border-radius:16px; padding:24px; margin-bottom:16px; }
+    .row { display:grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .muted { color:#6b7280; }
+    .btn { padding:10px 14px; border-radius:10px; border:none; cursor:pointer; font-weight:600; }
+    .btn.primary { background: linear-gradient(135deg, #7c3aed, #4f46e5); color:#fff; }
+    .btn.secondary { background: transparent; border:1px solid #e5e7eb; color:#4b5563; }
+    .kv { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed #e5e7eb; }
+    .badge { display:inline-block; padding:6px 10px; border-radius:9999px; background:#f3f4f6; border:1px solid #e5e7eb; font-size:12px; color:#4f46e5; }
+    a { color:#4f46e5; text-decoration:none; }
+    .section-title { margin: 8px 0 12px; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+    .product-mini { background:#ffffff; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; }
+    .product-mini img { width:100%; height:140px; object-fit:cover; display:block; }
+    .product-mini .info { padding:10px; }
+    .product-mini .title { margin:0 0 6px; font-weight:600; color:#1f2937; font-size:14px; }
+    .product-mini .price { color:#111827; font-weight:600; }
+    .table { width:100%; border-collapse: collapse; }
+    .table th, .table td { text-align:left; padding:10px; border-bottom:1px solid #e5e7eb; }
+    .empty { text-align:center; color:#6b7280; padding:16px; border:1px dashed #e5e7eb; border-radius:12px; }
+
+    /* Dark overrides */
+    body.theme-dark { background:#0f172a; color:#e2e8f0; }
+    body.theme-dark .card { background:#0b1220; border-color: rgba(255,255,255,0.06); }
+    body.theme-dark .muted { color:#94a3b8; }
+    body.theme-dark .btn.secondary { border-color: rgba(255,255,255,0.15); color:#e2e8f0; }
+    body.theme-dark .kv { border-bottom-color: rgba(255,255,255,0.06); }
+    body.theme-dark .badge { background:#111827; border-color: rgba(255,255,255,0.06); color:#a78bfa; }
+    body.theme-dark a { color:#a78bfa; }
+    body.theme-dark .product-mini { background:#0f172a; border-color: rgba(255,255,255,0.06); }
+    body.theme-dark .product-mini .title { color:#e5e7eb; }
+    body.theme-dark .product-mini .price { color:#cbd5e1; }
+    body.theme-dark .table th, body.theme-dark .table td { border-bottom-color: rgba(255,255,255,0.06); }
+    body.theme-dark .empty { color:#94a3b8; border-color: rgba(255,255,255,0.06); }
+  </style>
+</head>
+<body>
+  <button id="themeToggle" class="btn secondary" style="position:fixed; top:16px; right:16px;">Toggle Theme</button>
+  <div class="container">
+    <div class="card">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+        <div>
+          <h2 style="margin:0">My Account</h2>
+          <p class="muted">View your profile, artisan status, wishlist and cart summary</p>
+        </div>
+        <div>
+          <button id="signout" class="btn secondary">Sign Out</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="card">
+        <h3 style="margin-top:0">Profile</h3>
+        <div id="profile">
+          <div class="kv"><span>Name</span><span><strong id="name">-</strong> <button class="btn secondary" id="editName" style="padding:4px 8px; font-size:12px;">Edit</button></span></div>
+          <div class="kv"><span>Email</span><strong id="email">-</strong></div>
+          <div class="kv"><span>Role</span><strong id="role">-</strong></div>
+          <div class="kv"><span>Email Verified</span><strong id="verified">-</strong></div>
+          <div class="kv"><span>Last Login</span><strong id="lastLogin">-</strong></div>
+          <div class="kv"><span>Phone</span><span><strong id="phone">-</strong> <button class="btn secondary" id="editPhone" style="padding:4px 8px; font-size:12px;">Edit</button></span></div>
+          <div class="kv"><span>Address</span><span><strong id="address">-</strong> <button class="btn secondary" id="editAddress" style="padding:4px 8px; font-size:12px;">Edit</button></span></div>
+        </div>
+        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn secondary" href="join-artisan.html">Become an Artisan</a>
+          <button class="btn secondary" id="go-market">Browse Marketplace</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Artisan</h3>
+        <div id="artisan">
+          <div class="kv"><span>Status</span><strong id="aStatus">-</strong></div>
+          <div class="kv"><span>Business</span><strong id="aBusiness">-</strong></div>
+          <div class="kv"><span>Location</span><strong id="aLocation">-</strong></div>
+          <div style="margin-top:10px"><a href="join-artisan.html" class="badge">Apply / Update artisan profile</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="card">
+        <h3 class="section-title">Wishlist</h3>
+        <div id="wishlistGrid" class="grid"></div>
+        <div id="wishlistEmpty" class="empty" style="display:none;">No items in wishlist yet.</div>
+      </div>
+      <div class="card">
+        <h3 class="section-title">Cart</h3>
+        <table class="table" id="cartTable">
+          <thead>
+            <tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div id="cartEmpty" class="empty" style="display:none;">Your cart is empty.</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+          <div id="cartGrandTotal" class="badge">Total: ₹0</div>
+          <a class="btn primary" href="index.html#marketplace">Continue Shopping</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="card">
+        <h3 class="section-title">Orders</h3>
+        <div id="orders" class="empty">No orders yet. Once you place an order, it will appear here.</div>
+      </div>
+      <div class="card">
+        <h3 class="section-title">Security</h3>
+        <p class="muted">Manage your sign-in and recovery</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn secondary" id="changePwd">Change Password</button>
+          <button class="btn secondary" id="resetPwd">Forgot Password</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">Shortcuts</h3>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn primary" href="index.html#marketplace">Browse Marketplace</a>
+        <a class="btn secondary" href="join-artisan.html">Join as Artisan</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:5000';
+    const token = localStorage.getItem('ll_token');
+    if (!token) {
+      alert('Please sign in first. Redirecting to Sign In...');
+      window.location.href = 'signin.html';
+    }
+
+    // Theme init
+    (function(){
+      const saved = localStorage.getItem('ll_theme') || 'light';
+      document.body.classList.toggle('theme-dark', saved === 'dark');
+      const t = document.getElementById('themeToggle');
+      if (t) t.innerHTML = saved === 'dark' ? 'Light Mode' : 'Dark Mode';
+      t.addEventListener('click', () => {
+        const isDark = document.body.classList.toggle('theme-dark');
+        localStorage.setItem('ll_theme', isDark ? 'dark' : 'light');
+        t.innerHTML = isDark ? 'Light Mode' : 'Dark Mode';
+      });
+    })();
+
+    document.getElementById('signout').addEventListener('click', () => {
+      localStorage.removeItem('ll_token');
+      localStorage.removeItem('ll_refresh');
+      localStorage.removeItem('ll_user');
+      window.location.href = 'signin.html';
+    });
+
+    async function loadProfile(){
+      try {
+        const res = await fetch(API_BASE + '/api/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Failed to load profile');
+        const u = data.data.user;
+        const a = data.data.artisan;
+        document.getElementById('name').textContent = u.name;
+        document.getElementById('email').textContent = u.email;
+        document.getElementById('role').textContent = u.role;
+        document.getElementById('verified').textContent = u.isEmailVerified ? 'Yes' : 'No';
+        document.getElementById('lastLogin').textContent = u.lastLogin ? new Date(u.lastLogin).toLocaleString() : '-';
+
+        document.getElementById('aStatus').textContent = a ? a.verificationStatus : 'not an artisan';
+        document.getElementById('aBusiness').textContent = a ? a.businessName : '-';
+        document.getElementById('aLocation').textContent = a ? `${a.location.city}, ${a.location.state}` : '-';
+      } catch (err) {
+        console.error(err);
+        alert(err.message);
+      }
+    }
+
+    async function loadWishlist(){
+      try {
+        const res = await fetch(API_BASE + '/api/users/wishlist?page=1&limit=50', { headers: { 'Authorization': 'Bearer ' + token } });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Failed to load wishlist');
+        const products = data.data.products || [];
+        const grid = document.getElementById('wishlistGrid');
+        const empty = document.getElementById('wishlistEmpty');
+        grid.innerHTML = '';
+        if (products.length === 0) { empty.style.display = 'block'; return; } else { empty.style.display = 'none'; }
+        products.forEach(p => {
+          const img = Array.isArray(p.images) && p.images.length>0 ? (p.images.find(i=>i.isPrimary)||p.images[0]).url : '';
+          const price = p.price?.amount || 0;
+          const el = document.createElement('div');
+          el.className = 'product-mini';
+          el.innerHTML = `
+            <img src="${img}" alt="${p.title}">
+            <div class="info">
+              <div class="title">${p.title}</div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div class="price">₹${price.toLocaleString()}</div>
+                <div>
+                  <button class="btn primary" style="padding:6px 10px; margin-right:6px;" onclick="addWishToCart('${p._id}')">Add</button>
+                  <button class="btn secondary" style="padding:6px 10px;" onclick="removeFromWishlist('${p._id}')">Remove</button>
+                </div>
+              </div>
+            </div>`;
+          grid.appendChild(el);
+        });
+      } catch (err) { console.error(err); }
+    }
+
+    async function loadCart(){
+      try {
+        const res = await fetch(API_BASE + '/api/users/cart', { headers: { 'Authorization': 'Bearer ' + token } });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Failed to load cart');
+        const items = data.data.cart || [];
+        const tbody = document.querySelector('#cartTable tbody');
+        const empty = document.getElementById('cartEmpty');
+        const totalEl = document.getElementById('cartGrandTotal');
+        tbody.innerHTML = '';
+        if (items.length === 0) { empty.style.display = 'block'; totalEl.textContent = 'Total: ₹0'; return; } else { empty.style.display = 'none'; }
+        let grand = 0;
+        items.forEach(ci => {
+          const price = ci.product.price?.amount || 0;
+          const qty = ci.quantity || 0;
+          const row = document.createElement('tr');
+          const subtotal = price * qty;
+          grand += subtotal;
+          row.innerHTML = `<td>${ci.product.title}</td>
+            <td>
+              <button class="btn secondary" style="padding:2px 8px;" onclick="updateCartQty('${ci.product._id}', ${qty-1})">-</button>
+              <span style="display:inline-block; min-width:24px; text-align:center;">${qty}</span>
+              <button class="btn secondary" style="padding:2px 8px;" onclick="updateCartQty('${ci.product._id}', ${qty+1})">+</button>
+              <button class="btn secondary" style="padding:2px 8px; margin-left:6px;" onclick="removeCartItem('${ci.product._id}')">Remove</button>
+            </td>
+            <td>₹${price.toLocaleString()}</td><td>₹${subtotal.toLocaleString()}</td>`;
+          tbody.appendChild(row);
+        });
+        totalEl.textContent = `Total: ₹${grand.toLocaleString()}`;
+      } catch (err) { console.error(err); }
+    }
+
+    // Actions
+    document.getElementById('go-market').addEventListener('click', () => { window.location.href = 'index.html#marketplace'; });
+    async function addWishToCart(id){
+      try {
+        const res = await fetch(API_BASE + '/api/users/cart', { method:'POST', headers: { 'Content-Type':'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify({ productId: id, quantity: 1 }) });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Failed to add');
+        await loadCart();
+      } catch (err) { alert(err.message); }
+    }
+    window.addWishToCart = addWishToCart;
+
+    async function removeFromWishlist(id){
+      try {
+        const res = await fetch(API_BASE + '/api/users/wishlist/' + id, { method:'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Failed to remove');
+        await loadWishlist();
+      } catch (err) { alert(err.message); }
+    }
+    window.removeFromWishlist = removeFromWishlist;
+
+    async function updateCartQty(productId, qty){
+      try {
+        if (qty <= 0) { return removeCartItem(productId); }
+        const res = await fetch(API_BASE + '/api/users/cart/' + productId, { method:'PUT', headers: { 'Content-Type':'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify({ quantity: qty }) });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Failed to update');
+        await loadCart();
+      } catch (err) { alert(err.message); }
+    }
+    window.updateCartQty = updateCartQty;
+
+    async function removeCartItem(productId){
+      try {
+        const res = await fetch(API_BASE + '/api/users/cart/' + productId, { method:'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Failed to remove');
+        await loadCart();
+      } catch (err) { alert(err.message); }
+    }
+    window.removeCartItem = removeCartItem;
+
+    // Profile inline edits
+    document.getElementById('editName').addEventListener('click', async () => {
+      const cur = document.getElementById('name').textContent.trim();
+      const next = prompt('Update name', cur);
+      if (!next || next === cur) return;
+      await patchProfile({ name: next });
+    });
+    document.getElementById('editPhone').addEventListener('click', async () => {
+      const cur = document.getElementById('phone').textContent.trim();
+      const next = prompt('Update phone', cur === '-' ? '' : cur);
+      if (!next || next === cur) return;
+      await patchProfile({ phone: next });
+    });
+    document.getElementById('editAddress').addEventListener('click', async () => {
+      const cur = document.getElementById('address').textContent.trim();
+      const city = prompt('City', '');
+      const state = prompt('State', '');
+      const country = prompt('Country', 'India');
+      if (!city && !state && !country) return;
+      await patchProfile({ address: { city, state, country } });
+    });
+    async function patchProfile(payload){
+      try {
+        const res = await fetch(API_BASE + '/api/users/profile', { method:'PATCH', headers: { 'Content-Type':'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify(payload) });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Failed to update');
+        await loadProfile();
+      } catch (err) { alert(err.message); }
+    }
+
+    // Try loading recent orders if endpoint exists
+    async function loadOrders(){
+      try {
+        const res = await fetch(API_BASE + '/api/orders?limit=10', { headers: { 'Authorization': 'Bearer ' + token } });
+        if (!res.ok) return; // silently ignore if not available
+        const data = await res.json();
+        const ordersDiv = document.getElementById('orders');
+        const list = data.data?.orders || [];
+        if (!Array.isArray(list) || list.length === 0) return;
+        ordersDiv.innerHTML = '<table class="table"><thead><tr><th>Order #</th><th>Date</th><th>Total</th><th>Status</th></tr></thead><tbody>' +
+          list.map(o => `<tr><td>${o._id}</td><td>${new Date(o.createdAt).toLocaleString()}</td><td>₹${(o.total?.amount||0).toLocaleString()}</td><td>${o.status||'-'}</td></tr>`).join('') + '</tbody></table>';
+      } catch {}
+    }
+
+    document.getElementById('changePwd').addEventListener('click', async () => {
+      const current = prompt('Enter current password');
+      const next = prompt('Enter new password (min 6 chars, include lowercase, uppercase, number)');
+      if (!current || !next) return;
+      try {
+        const res = await fetch(API_BASE + '/api/auth/change-password', { method:'POST', headers: { 'Content-Type':'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify({ currentPassword: current, newPassword: next }) });
+        const data = await res.json();
+        alert(data.message || (res.ok ? 'Password changed' : 'Failed'));
+      } catch { alert('Failed'); }
+    });
+    document.getElementById('resetPwd').addEventListener('click', async () => {
+      const u = JSON.parse(localStorage.getItem('ll_user')||'{}');
+      const email = u.email || prompt('Enter your account email for password reset:');
+      if (!email) return;
+      try {
+        const res = await fetch(API_BASE + '/api/auth/forgot-password', { method:'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify({ email }) });
+        const data = await res.json();
+        alert(data.message || 'If that email exists, a reset was initiated.');
+      } catch { alert('Failed'); }
+    });
+
+    // Theme init
+    (function(){
+      const saved = localStorage.getItem('ll_theme') || 'light';
+      document.body.classList.toggle('theme-dark', saved === 'dark');
+      const t = document.getElementById('themeToggle');
+      const setBtn = () => t.innerHTML = saved === 'dark' ? 'Light Mode' : 'Dark Mode';
+      setBtn();
+      t.addEventListener('click', () => {
+        const nowDark = !document.body.classList.contains('theme-dark');
+        document.body.classList.toggle('theme-dark', nowDark);
+        localStorage.setItem('ll_theme', nowDark ? 'dark' : 'light');
+        t.innerHTML = nowDark ? 'Light Mode' : 'Dark Mode';
+      });
+    })();
+
+    loadProfile();
+    loadWishlist();
+    loadCart();
+    loadOrders();
+  </script>
+</body>
+</html>

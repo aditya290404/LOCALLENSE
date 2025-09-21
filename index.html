@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalLense - AI-Powered Marketplace for Local Artisans</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-palette"></i>
+                <span>LocalLense</span>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#marketplace">Marketplace</a></li>
+                <li><a href="#stories">Stories</a></li>
+                <li><a href="#ai-assistant">AI Assistant</a></li>
+                <li><a href="#community">Community</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button id="theme-toggle" title="Toggle theme" class="btn-secondary" style="display:inline-flex; align-items:center; gap:8px;">
+                    <i class="fas fa-sun"></i>
+                </button>
+                <a class="btn-secondary" href="signin.html" style="text-decoration:none; display:inline-block; padding:10px 16px; border-radius:10px; border:1px solid rgba(255,255,255,0.1);">Sign In</a>
+                <a class="btn-primary" href="join-artisan.html" style="text-decoration:none; display:inline-block; padding:10px 16px; border-radius:10px;">Join as Artisan</a>
+                <div class="wishlist-icon" id="wishlist-icon" title="Wishlist" style="cursor:pointer; position:relative; display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:10px; border:1px solid rgba(255,255,255,0.1); margin-right:8px;">
+                    <i class="fas fa-heart"></i>
+                    <span class="wishlist-count" style="position:absolute; top:-6px; right:-6px; background:#ef4444; color:#fff; border-radius:9999px; padding:2px 6px; font-size:12px; display:none;">0</span>
+                </div>
+                <div class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
+            <div class="mobile-menu-toggle" id="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Empowering Local Artisans with AI</h1>
+            <p>Discover authentic handmade crafts, support local communities, and connect with artisans through our AI-powered marketplace</p>
+            <div class="hero-search">
+                <input type="text" placeholder="Search for crafts, artisans, or stories..." id="hero-search">
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Artisans</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">2,000+</span>
+                    <span class="stat-label">Products</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">Cities</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="floating-card">
+                <div class="card-image">
+                    <div class="gradient-sphere"></div>
+                </div>
+                <div class="card-content">
+                    <h3>AI-Powered Marketplace Assistant for Local Artisans</h3>
+                    <p>Create an AI-driven platform that helps local artisans market their craft, tell their stories, and expand their reach to new digital audiences.</p>
+                    <a href="#" class="view-more">View more</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Buy Local Section -->
+    <section class="why-local">
+        <div class="container">
+            <h2>Why Buy from Local Artisans?</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <i class="fas fa-heart"></i>
+                    <h3>Authentic Stories</h3>
+                    <p>Every product comes with a unique story from the artisan who created it</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-leaf"></i>
+                    <h3>Sustainable</h3>
+                    <p>Eco-friendly materials and traditional techniques that respect the environment</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Community Support</h3>
+                    <p>Your purchase directly supports local families and preserves cultural heritage</p>
+                </div>
+                <div class="benefit-card">
+                    <i class="fas fa-star"></i>
+                    <h3>Unique Quality</h3>
+                    <p>Handcrafted items with attention to detail that mass production can't match</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section id="marketplace" class="featured-products">
+        <div class="container">
+            <h2>Featured Products</h2>
+            <div class="filters">
+                <button class="filter-btn active" data-category="all">All</button>
+                <button class="filter-btn" data-category="jewelry">Jewelry</button>
+                <button class="filter-btn" data-category="textiles">Textiles</button>
+                <button class="filter-btn" data-category="pottery">Pottery</button>
+                <button class="filter-btn" data-category="woodwork">Woodwork</button>
+                <button class="filter-btn" data-category="art">Art</button>
+            </div>
+            <div class="products-grid" id="products-grid">
+                <!-- Products will be dynamically loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Assistant Section -->
+    <section id="ai-assistant" class="ai-assistant">
+        <div class="container">
+            <h2>AI Assistant for Artisans</h2>
+            <div class="ai-features">
+                <div class="ai-feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>Auto-Generate Descriptions</h3>
+                    <p>Upload a product photo and let AI create compelling descriptions, titles, and tags</p>
+                    <button class="btn-primary" onclick="openAIAssistant('description')">Try Now</button>
+                </div>
+                <div class="ai-feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Smart Pricing</h3>
+                    <p>Get AI-powered pricing suggestions based on market trends and material costs</p>
+                    <button class="btn-primary" onclick="openAIAssistant('pricing')">Get Pricing</button>
+                </div>
+                <div class="ai-feature">
+                    <div class="feature-icon">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <h3>Social Media Assistant</h3>
+                    <p>Generate engaging posts, hashtags, and marketing campaigns for your crafts</p>
+                    <button class="btn-primary" onclick="openAIAssistant('social')">Create Posts</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stories Section -->
+    <section id="stories" class="stories">
+        <div class="container">
+            <h2>Artisan Stories & Culture</h2>
+            <div class="stories-grid">
+                <div class="story-card featured">
+                    <div class="story-image">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop" alt="Artisan story">
+                    </div>
+                    <div class="story-content">
+                        <h3>From Village to Global: The Journey of Rajesh Kumar</h3>
+                        <p>Discover how a traditional potter from Rajasthan is using AI to reach customers worldwide while preserving ancient techniques...</p>
+                        <div class="story-meta">
+                            <span class="artisan-name">Rajesh Kumar</span>
+                            <span class="story-date">2 days ago</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="story-card">
+                    <div class="story-image">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=300&fit=crop" alt="Artisan story">
+                    </div>
+                    <div class="story-content">
+                        <h3>Weaving Dreams: The Art of Handloom</h3>
+                        <p>Meet Priya, a third-generation weaver who's bringing traditional handloom to the digital age...</p>
+                        <div class="story-meta">
+                            <span class="artisan-name">Priya Sharma</span>
+                            <span class="story-date">1 week ago</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="story-card">
+                    <div class="story-image">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=300&fit=crop" alt="Artisan story">
+                    </div>
+                    <div class="story-content">
+                        <h3>Metal Magic: The Craft of Jewelry Making</h3>
+                        <p>Explore the intricate world of traditional jewelry making with master craftsman Ahmed...</p>
+                        <div class="story-meta">
+                            <span class="artisan-name">Ahmed Ali</span>
+                            <span class="story-date">2 weeks ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="community" class="community">
+        <div class="container">
+            <h2>Community & Reviews</h2>
+            <div class="community-content">
+                <div class="reviews-section">
+                    <h3>What Our Customers Say</h3>
+                    <div class="reviews-grid">
+                        <div class="review-card">
+                            <div class="review-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p>"The quality is amazing! I love knowing that my purchase supports a local family."</p>
+                            <div class="reviewer">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop&crop=face" alt="Customer">
+                                <span>Sarah Johnson</span>
+                            </div>
+                        </div>
+                        <div class="review-card">
+                            <div class="review-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p>"The AI-generated descriptions helped me understand the craftsmanship behind each piece."</p>
+                            <div class="reviewer">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face" alt="Customer">
+                                <span>Michael Chen</span>
+                            </div>
+                        </div>
+                        <div class="review-card">
+                            <div class="review-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p>"Beautiful products and the artisan stories make each purchase special."</p>
+                            <div class="reviewer">
+                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=50&h=50&fit=crop&crop=face" alt="Customer">
+                                <span>Emily Davis</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="support-section">
+                    <h3>Support Local Artisans</h3>
+                    <div class="support-options">
+                        <div class="support-card">
+                            <i class="fas fa-gift"></i>
+                            <h4>Buy Products</h4>
+                            <p>Purchase authentic handmade items directly from artisans</p>
+                        </div>
+                        <div class="support-card">
+                            <i class="fas fa-heart"></i>
+                            <h4>Donate to Craft</h4>
+                            <p>Support artisans in preserving traditional techniques</p>
+                        </div>
+                        <div class="support-card">
+                            <i class="fas fa-share"></i>
+                            <h4>Share Stories</h4>
+                            <p>Help spread the word about local artisans and their crafts</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About LocalLense</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Our Mission</h3>
+                    <p>We're on a mission to bridge the gap between traditional craftsmanship and modern technology. LocalLense empowers local artisans by providing AI-driven tools to market their crafts, tell their stories, and reach global audiences while preserving cultural heritage.</p>
+                    
+                    <h3>What We Stand For</h3>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Sustainability and eco-friendly practices</li>
+                        <li><i class="fas fa-check"></i> Cultural preservation and heritage protection</li>
+                        <li><i class="fas fa-check"></i> Fair trade and ethical business practices</li>
+                        <li><i class="fas fa-check"></i> Innovation in traditional crafts</li>
+                    </ul>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-users"></i>
+                        <h4>500+</h4>
+                        <p>Active Artisans</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-globe"></i>
+                        <h4>50+</h4>
+                        <p>Cities Covered</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        <h4>10,000+</h4>
+                        <p>Happy Customers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-palette"></i>
+                        <span>LocalLense</span>
+                    </div>
+                    <p>Empowering local artisans with AI-driven tools to reach global audiences while preserving cultural heritage.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#marketplace">Marketplace</a></li>
+                        <li><a href="#stories">Stories</a></li>
+                        <li><a href="#ai-assistant">AI Assistant</a></li>
+                        <li><a href="#community">Community</a></li>
+                        <li><a href="account.html">My Account</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>For Artisans</h4>
+                    <ul>
+                        <li><a href="#">Join as Artisan</a></li>
+                        <li><a href="#">Seller Dashboard</a></li>
+                        <li><a href="#">AI Tools</a></li>
+                        <li><a href="#">Marketing Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LocalLense. All rights reserved. Made with ❤️ for local artisans.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot -->
+    <div class="chatbot-toggle" onclick="toggleChatbot()">
+        <i class="fas fa-comments"></i>
+    </div>
+    
+    <div class="chatbot" id="chatbot">
+        <div class="chatbot-header">
+            <h4>AI Assistant</h4>
+            <button onclick="toggleChatbot()" class="close-chatbot">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chatbot-messages" id="chatbot-messages">
+            <div class="message bot-message">
+                <p>Hello! I'm your AI assistant. How can I help you today?</p>
+            </div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbot-input" placeholder="Ask me anything..." onkeypress="handleChatbotKeypress(event)">
+            <button onclick="sendChatbotMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

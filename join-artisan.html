@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join as Artisan - LocalLense</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Light defaults */
+    .page { min-height: 100vh; background: #fafafa; padding: 32px 16px; color: #1f2937; }
+    .container { max-width: 980px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 24px; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+    @media(min-width: 900px){ .grid { grid-template-columns: 1fr 1fr; } }
+    .card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 24px; }
+    h1 { margin: 0 0 8px; font-size: 28px; }
+    p.muted { color: #6b7280; margin: 0 0 16px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display:block; margin-bottom:8px; color:#374151; }
+    .form-group input, .form-group textarea { width:100%; padding:12px 14px; border-radius:10px; border:1px solid #e5e7eb; background:#ffffff; color:#111827; outline:none; }
+    .form-group textarea { min-height: 110px; resize: vertical; }
+    .row { display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .btn { width: 100%; padding: 12px; border: none; border-radius: 10px; background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff; font-weight: 600; cursor: pointer; }
+    .btn.secondary { background: transparent; border:1px solid rgba(255,255,255,0.15); }
+    .status { margin-top: 8px; font-size: 14px; }
+    .status.error { color: #b91c1c; }
+    .status.success { color: #166534; }
+    .badge { display:inline-block; padding:6px 10px; border-radius:9999px; background:#f3f4f6; border:1px solid #e5e7eb; font-size:12px; color:#4f46e5; }
+    .theme-toggle { position: fixed; top: 16px; right: 16px; background: transparent; border: 1px solid #e5e7eb; color:#4b5563; padding:8px 12px; border-radius:10px; cursor:pointer; }
+
+    /* Dark overrides */
+    body.theme-dark .page { background:#0f172a; color:#e2e8f0; }
+    body.theme-dark .card { background:#0b1220; border-color: rgba(255,255,255,0.06); }
+    body.theme-dark .form-group label { color:#cbd5e1; }
+    body.theme-dark .form-group input, body.theme-dark .form-group textarea { background:#0f172a; color:#e2e8f0; border-color: rgba(255,255,255,0.08); }
+    body.theme-dark .muted { color:#94a3b8; }
+    body.theme-dark .badge { background:#111827; border-color: rgba(255,255,255,0.06); color:#a78bfa; }
+    body.theme-dark .theme-toggle { border-color: rgba(255,255,255,0.15); color:#e5e7eb; }
+  </style>
+</head>
+<body>
+  <button id="themeToggle" class="theme-toggle" title="Toggle theme"><i class="fas fa-moon"></i></button>
+  <div class="page">
+    <div class="container">
+      <div class="header">
+        <h1>Join as Artisan</h1>
+        <p class="muted">Create your account and submit your artisan profile to start selling on LocalLense.</p>
+        <div id="step-badge" class="badge">Step 1 of 2: Create Account</div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h2 style="margin-top:0">Step 1: Account</h2>
+          <p class="muted">Already have an account? <a href="signin.html" style="color:#a78bfa">Sign in</a> and skip to Step 2.</p>
+          <form id="account-form">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input id="name" type="text" placeholder="Your name" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input id="email" type="email" placeholder="you@example.com" required />
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input id="password" type="password" placeholder="At least 6 characters" required />
+              <div class="muted" style="font-size:12px; margin-top:6px;">
+                Password must be at least 6 characters and include at least one lowercase letter, one uppercase letter, and one number.
+              </div>
+            </div>
+            <button class="btn" type="submit" id="create-account-btn">Create Account</button>
+            <div class="status" id="account-status"></div>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2 style="margin-top:0">Step 2: Artisan Profile</h2>
+          <p class="muted">Fill your artisan details. You must be signed in to submit.</p>
+          <form id="artisan-form">
+            <div class="form-group">
+              <label for="businessName">Business/Studio Name</label>
+              <input id="businessName" type="text" placeholder="e.g. Priya Handloom Studio" required />
+            </div>
+            <div class="form-group">
+              <label for="description">About Your Craft</label>
+              <textarea id="description" placeholder="Tell us about your craft and story" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="specialties">Specialties (comma-separated)</label>
+              <input id="specialties" type="text" placeholder="weaving, handloom, natural dyes" required />
+            </div>
+            <div class="form-group">
+              <label for="experience">Years of Experience</label>
+              <input id="experience" type="number" min="0" value="1" required />
+            </div>
+            <div class="row">
+              <div class="form-group">
+                <label for="city">City</label>
+                <input id="city" type="text" required />
+              </div>
+              <div class="form-group">
+                <label for="state">State</label>
+                <input id="state" type="text" required />
+              </div>
+              <div class="form-group">
+                <label for="country">Country</label>
+                <input id="country" type="text" value="India" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="idProof">ID Proof (URL to image or doc)</label>
+              <input id="idProof" type="text" placeholder="https://..." required />
+            </div>
+            <button class="btn" type="submit" id="submit-artisan-btn">Submit Artisan Profile</button>
+            <div class="status" id="artisan-status"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:5000';
+    // Theme
+    (function(){
+      const saved = localStorage.getItem('ll_theme') || 'light';
+      document.body.classList.toggle('theme-dark', saved === 'dark');
+      document.getElementById('themeToggle').innerHTML = saved === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+      document.getElementById('themeToggle').addEventListener('click', () => {
+        const isDark = document.body.classList.toggle('theme-dark');
+        localStorage.setItem('ll_theme', isDark ? 'dark' : 'light');
+        document.getElementById('themeToggle').innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+      });
+    })();
+
+    const stepBadge = document.getElementById('step-badge');
+
+    function getToken(){ return localStorage.getItem('ll_token'); }
+    function setAuth(data){
+      localStorage.setItem('ll_token', data.data.token);
+      localStorage.setItem('ll_refresh', data.data.refreshToken);
+      localStorage.setItem('ll_user', JSON.stringify(data.data.user));
+      stepBadge.textContent = 'Step 2 of 2: Artisan Profile';
+    }
+
+    // Initialize step based on existing token
+    if (getToken()) stepBadge.textContent = 'Step 2 of 2: Artisan Profile';
+
+    // Step 1: Create account -> /api/auth/register
+    const accountForm = document.getElementById('account-form');
+    const accountStatus = document.getElementById('account-status');
+    const createBtn = document.getElementById('create-account-btn');
+
+    accountForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      accountStatus.textContent = '';
+      accountStatus.className = 'status';
+      createBtn.disabled = true;
+      try {
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+        // Client-side password validation to match backend
+        const pwOk = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/.test(password);
+        if (!pwOk) {
+          throw new Error('Password must be at least 6 characters and include lowercase, uppercase, and a number.');
+        }
+        const res = await fetch(API_BASE + '/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          // Prefer detailed validation messages if available
+          if (data && data.errors && Array.isArray(data.errors) && data.errors.length) {
+            const first = data.errors[0];
+            throw new Error(first.message || data.message || 'Registration failed');
+          }
+          throw new Error(data.message || 'Registration failed');
+        }
+        setAuth(data);
+        accountStatus.textContent = 'Account created! Proceed to Step 2.';
+        accountStatus.classList.add('success');
+      } catch (err) {
+        accountStatus.textContent = err.message;
+        accountStatus.classList.add('error');
+      } finally {
+        createBtn.disabled = false;
+      }
+    });
+
+    // Step 2: Submit artisan profile -> /api/auth/artisan-register
+    const artisanForm = document.getElementById('artisan-form');
+    const artisanStatus = document.getElementById('artisan-status');
+    const submitArtisanBtn = document.getElementById('submit-artisan-btn');
+
+    artisanForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      artisanStatus.textContent = '';
+      artisanStatus.className = 'status';
+      submitArtisanBtn.disabled = true;
+      try {
+        const token = getToken();
+        if (!token) throw new Error('Please create an account or sign in first.');
+
+        const businessName = document.getElementById('businessName').value.trim();
+        const description = document.getElementById('description').value.trim();
+        const specialties = document.getElementById('specialties').value.split(',').map(s => s.trim()).filter(Boolean);
+        const experience = parseInt(document.getElementById('experience').value, 10) || 0;
+        const city = document.getElementById('city').value.trim();
+        const state = document.getElementById('state').value.trim();
+        const country = document.getElementById('country').value.trim();
+        const idProof = document.getElementById('idProof').value.trim();
+
+        const payload = {
+          businessName,
+          description,
+          specialties,
+          experience,
+          location: { city, state, country },
+          documents: { idProof }
+        };
+
+        const res = await fetch(API_BASE + '/api/auth/artisan-register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Submission failed');
+
+        artisanStatus.textContent = 'Submitted! Your profile is under review.';
+        artisanStatus.classList.add('success');
+        setTimeout(() => { window.location.href = 'account.html'; }, 1200);
+      } catch (err) {
+        artisanStatus.textContent = err.message;
+        artisanStatus.classList.add('error');
+      } finally {
+        submitArtisanBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

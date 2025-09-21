@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In - LocalLense</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Light defaults */
+    body { background:#fafafa; color:#1f2937; }
+    .auth-wrapper { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .auth-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 32px; width: 100%; max-width: 420px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+    .auth-card h1 { color: #111827; margin: 0 0 8px; font-size: 28px; }
+    .auth-card p { color: #6b7280; margin: 0 0 24px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; color: #374151; margin-bottom: 8px; }
+    .form-group input { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid #e5e7eb; background: #ffffff; color: #111827; outline: none; }
+    .form-group input:focus { border-color: #4f46e5; }
+    .btn { width: 100%; padding: 12px; border: none; border-radius: 10px; background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff; font-weight: 600; cursor: pointer; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .helper { margin-top: 16px; color: #6b7280; font-size: 14px; text-align: center; }
+    .helper a { color: #4f46e5; text-decoration: none; }
+    .status { margin-top: 12px; font-size: 14px; }
+    .status.error { color: #b91c1c; }
+    .status.success { color: #166534; }
+    .theme-toggle { position: fixed; top: 16px; right: 16px; background: transparent; border: 1px solid #e5e7eb; color:#4b5563; padding:8px 12px; border-radius:10px; cursor:pointer; }
+
+    /* Dark overrides */
+    body.theme-dark { background:#0f172a; color:#e2e8f0; }
+    body.theme-dark .auth-card { background:#0b1220; border-color: rgba(255,255,255,0.06); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    body.theme-dark .auth-card h1 { color:#fff; }
+    body.theme-dark .auth-card p { color:#94a3b8; }
+    body.theme-dark .form-group label { color:#cbd5e1; }
+    body.theme-dark .form-group input { background:#0f172a; color:#e2e8f0; border-color: rgba(255,255,255,0.08); }
+    body.theme-dark .helper { color:#94a3b8; }
+    body.theme-dark .helper a { color:#a78bfa; }
+    body.theme-dark .theme-toggle { border-color: rgba(255,255,255,0.15); color:#e5e7eb; }
+  </style>
+</head>
+<body>
+  <button id="themeToggle" class="theme-toggle" title="Toggle theme"><i class="fas fa-moon"></i></button>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <h1>Welcome back</h1>
+      <p>Sign in to continue to LocalLense</p>
+      <form id="signin-form">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="you@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="••••••••" required />
+        </div>
+        <button class="btn" id="signin-btn" type="submit">Sign In</button>
+        <div class="status" id="status"></div>
+      </form>
+      <div class="helper">Don't have an account? <a href="join-artisan.html">Join as Artisan</a></div>
+      <div class="helper"><a href="#" id="forgot-link">Forgot your password?</a></div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:5000';
+    // Theme
+    (function(){
+      const saved = localStorage.getItem('ll_theme') || 'light';
+      document.body.classList.toggle('theme-dark', saved === 'dark');
+      document.getElementById('themeToggle').innerHTML = saved === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+      document.getElementById('themeToggle').addEventListener('click', () => {
+        const isDark = document.body.classList.toggle('theme-dark');
+        localStorage.setItem('ll_theme', isDark ? 'dark' : 'light');
+        document.getElementById('themeToggle').innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+      });
+    })();
+
+    const form = document.getElementById('signin-form');
+    const statusEl = document.getElementById('status');
+    const btn = document.getElementById('signin-btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      statusEl.textContent = '';
+      statusEl.className = 'status';
+      btn.disabled = true;
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      try {
+        const res = await fetch(API_BASE + '/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Login failed');
+
+        // Store token for subsequent requests
+        localStorage.setItem('ll_token', data.data.token);
+        localStorage.setItem('ll_refresh', data.data.refreshToken);
+        localStorage.setItem('ll_user', JSON.stringify(data.data.user));
+
+        statusEl.textContent = 'Signed in successfully! Redirecting...';
+        statusEl.classList.add('success');
+        setTimeout(() => { window.location.href = 'account.html'; }, 800);
+      } catch (err) {
+        statusEl.textContent = err.message;
+        statusEl.classList.add('error');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    document.getElementById('forgot-link').addEventListener('click', async (e) => {
+      e.preventDefault();
+      const email = prompt('Enter your account email for password reset:');
+      if (!email) return;
+      try {
+        const res = await fetch(API_BASE + '/api/auth/forgot-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        alert(data.message || 'If that email exists, a reset was initiated.');
+      } catch (err) {
+        alert('Failed to initiate reset.');
+      }
+    });
+  </script>
+</body>
+</html>
